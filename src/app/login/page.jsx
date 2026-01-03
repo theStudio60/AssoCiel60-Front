@@ -140,7 +140,7 @@ export default function Login() {
           </div>
 
           <div className="mt-8 text-center">
-            <p className="text-slate-500 text-xs">© 2025 Alprail. Tous droits réservés.</p>
+            <p className="text-slate-500 text-xs">© 2026 Alprail. Tous droits réservés.</p>
           </div>
         </div>
       </main>

@@ -21,6 +21,13 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="fr">
+      <head>
+        {/* SweetAlert2 CSS */}
+        <link
+          rel="stylesheet"
+          href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css"
+        />
+      </head>
       <body className={`${poppins.variable} font-poppins antialiased`}>
         <LanguageProvider>
           {children}

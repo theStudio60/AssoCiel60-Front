@@ -481,7 +481,7 @@ export default function Register() {
 
       {/* Footer */}
       <footer className="relative z-10 py-6 text-center">
-        <p className="text-slate-500 text-sm">© 2025 Alprail. Tous droits réservés.</p>
+        <p className="text-slate-500 text-sm">© 2026 Alprail. Tous droits réservés.</p>
       </footer>
     </div>
   );

@@ -30,7 +30,7 @@ export default function MemberSidebar() {
   ];
 
   const others = [
-    { icon: Settings, label: 'Paramètres', path: '/member/settings' },
+    { icon: Settings, label: 'Mes Paramètres', path: '/member/settings' },
   ];
 
   const handleLogout = () => {
