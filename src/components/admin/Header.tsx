@@ -69,7 +69,7 @@ export default function Header() {
       try {
         const token = localStorage.getItem('token');
         const response = await fetch(
-          `${process.env.NEXT_PUBLIC_API_URL}/api/admin/search?q=${encodeURIComponent(searchQuery)}`,
+         `${process.env.NEXT_PUBLIC_API_URL}/admin/search?q=${encodeURIComponent(searchQuery)}`,
           {
             headers: {
               'Authorization': `Bearer ${token}`,
@@ -161,7 +161,7 @@ export default function Header() {
     <header className="bg-white/80 backdrop-blur-xl border-b border-slate-200/50 sticky top-0 z-50">
       <div className="px-8 py-3 flex items-center justify-between">
         {/* Search - Left Side */}
-        <div className="flex-1 max-w-md relative" ref={searchRef}>
+        <div className="flex-1 max-w-md w-full sm:w-auto relative" ref={searchRef}>
           <div className="relative">
             <input
               type="text"
@@ -200,8 +200,7 @@ export default function Header() {
                     <button
                       key={`member-${result.id}`}
                       onClick={() => handleResultClick(result.url)}
-                      className="w-full flex items-center gap-3 px-3 py-2 hover:bg-slate-50 rounded-lg transition-all text-left"
-                    >
+                      className="w-full flex items-center gap-3 px-3 py-2 hover:bg-slate-50 rounded-lg transition-all text-left cursor-pointer"                    >
                       {getResultIcon(result.type)}
                       <div className="flex-1 min-w-0">
                         <p className="text-sm font-semibold text-slate-900 truncate">{result.title}</p>
@@ -223,8 +222,7 @@ export default function Header() {
                     <button
                       key={`org-${result.id}`}
                       onClick={() => handleResultClick(result.url)}
-                      className="w-full flex items-center gap-3 px-3 py-2 hover:bg-slate-50 rounded-lg transition-all text-left"
-                    >
+                      className="w-full flex items-center gap-3 px-3 py-2 hover:bg-slate-50 rounded-lg transition-all text-left cursor-pointer"                    >
                       {getResultIcon(result.type)}
                       <div className="flex-1 min-w-0">
                         <p className="text-sm font-semibold text-slate-900 truncate">{result.title}</p>
@@ -243,8 +241,7 @@ export default function Header() {
                     <button
                       key={`sub-${result.id}`}
                       onClick={() => handleResultClick(result.url)}
-                      className="w-full flex items-center gap-3 px-3 py-2 hover:bg-slate-50 rounded-lg transition-all text-left"
-                    >
+                      className="w-full flex items-center gap-3 px-3 py-2 hover:bg-slate-50 rounded-lg transition-all text-left cursor-pointer"                    >
                       {getResultIcon(result.type)}
                       <div className="flex-1 min-w-0">
                         <p className="text-sm font-semibold text-slate-900 truncate">{result.title}</p>
@@ -268,8 +265,7 @@ export default function Header() {
                     <button
                       key={`invoice-${result.id}`}
                       onClick={() => handleResultClick(result.url)}
-                      className="w-full flex items-center gap-3 px-3 py-2 hover:bg-slate-50 rounded-lg transition-all text-left"
-                    >
+                      className="w-full flex items-center gap-3 px-3 py-2 hover:bg-slate-50 rounded-lg transition-all text-left cursor-pointer"                    >
                       {getResultIcon(result.type)}
                       <div className="flex-1 min-w-0">
                         <p className="text-sm font-semibold text-slate-900 truncate">{result.title}</p>
@@ -298,8 +294,7 @@ export default function Header() {
                     <button
                       key={`plan-${result.id}`}
                       onClick={() => handleResultClick(result.url)}
-                      className="w-full flex items-center gap-3 px-3 py-2 hover:bg-slate-50 rounded-lg transition-all text-left"
-                    >
+                      className="w-full flex items-center gap-3 px-3 py-2 hover:bg-slate-50 rounded-lg transition-all text-left cursor-pointer"                    >
                       {getResultIcon(result.type)}
                       <div className="flex-1 min-w-0">
                         <p className="text-sm font-semibold text-slate-900 truncate">{result.title}</p>
@@ -326,21 +321,6 @@ export default function Header() {
 
         {/* Right Side Actions */}
         <div className="flex items-center gap-2">
-          {/* Language */}
-          <button
-            onClick={() => switchLang(lang === 'fr' ? 'en' : 'fr')}
-            className="group relative px-3 py-2 hover:bg-slate-100 rounded-xl transition-all"
-          >
-            <Globe size={18} className="text-slate-600 group-hover:text-[#3776c5]" />
-            <span className="absolute -top-1 -right-1 px-1.5 py-0.5 bg-[#3776c5] text-white text-[10px] font-bold rounded-full">
-              {lang.toUpperCase()}
-            </span>
-          </button>
-
-          <button className="group relative p-2 hover:bg-slate-100 rounded-xl transition-all">
-            <MessageSquare size={18} className="text-slate-600 group-hover:text-[#3776c5]" />
-            <span className="absolute -top-0.5 -right-0.5 px-1.5 py-0.5 bg-[#3776c5] text-white text-[10px] font-bold rounded-full">3</span>
-          </button>
 
           {/* Divider */}
           <div className="w-px h-8 bg-slate-200 mx-2"></div>
@@ -374,7 +354,7 @@ export default function Header() {
             </button>
 
             {dropdownOpen && (
-              <div className="absolute right-0 mt-2 w-72 bg-white rounded-2xl shadow-2xl border border-slate-200/50 overflow-hidden z-50">
+              <div className="absolute right-0 mt-2 w-72 max-w-[calc(100vw-2rem)] bg-white rounded-2xl shadow-2xl border border-slate-200/50 overflow-hidden z-50">
                 <div className="p-4 bg-gradient-to-br from-slate-50 to-blue-50 border-b border-slate-200/50">
                   <div className="flex items-center gap-3">
                     {user?.profile_photo ? (

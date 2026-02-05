@@ -4,6 +4,7 @@ import { useState, useEffect, Suspense } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import Image from 'next/image';
 import Link from 'next/link';
+import { Eye, EyeOff } from 'lucide-react';
 
 function ResetPasswordForm() {
   const router = useRouter();
@@ -13,6 +14,8 @@ function ResetPasswordForm() {
   const [error, setError] = useState('');
   const [success, setSuccess] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
+  const [showPasswordConfirm, setShowPasswordConfirm] = useState(false);
 
   const token = searchParams.get('token');
   const email = searchParams.get('email');
@@ -40,11 +43,11 @@ function ResetPasswordForm() {
     setLoading(true);
 
     try {
-      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/reset-password`, {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/password/reset`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          email,
+          email: decodeURIComponent(email || ''),
           token,
           password,
           password_confirmation: passwordConfirmation,
@@ -80,7 +83,7 @@ function ResetPasswordForm() {
         <div className="max-w-7xl mx-auto px-6 py-5 flex items-center justify-between">
           <Image src="/logo.png" alt="Alprail" width={180} height={50} className="object-contain" />
           <a 
-            href="#" 
+            href="/register" 
             className="border-2 border-[#3776c5] text-[#3776c5] px-8 py-2.5 rounded-full font-semibold hover:bg-[#3776c5] hover:text-white transition-all shadow-md hover:shadow-lg transform hover:-translate-y-0.5"
           >
             Adhérer
@@ -122,32 +125,52 @@ function ResetPasswordForm() {
             ) : (
               <form onSubmit={handleSubmit} className="space-y-5">
                 <div>
-                  <label className="block text-slate-700 font-semibold mb-2 text-sm">Nouveau mot de passe</label>
-                  <input
-                    type="password"
-                    placeholder="••••••••"
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                    className="w-full px-4 py-3.5 border border-slate-200 rounded-xl focus:ring-2 focus:ring-[#3776c5]/30 focus:border-[#3776c5] transition-all outline-none text-sm text-slate-900"
-                    required
-                    minLength={8}
-                    disabled={!token || !email}
-                  />
+                  <label className="block text-slate-700 font-semibold mb-2 text-sm">Nouveau mot de passe *</label>
+                  <div className="relative">
+                    <input
+                      type={showPassword ? "text" : "password"}
+                      placeholder="••••••••"
+                      value={password}
+                      onChange={(e) => setPassword(e.target.value)}
+                      className="w-full px-4 py-3.5 pr-12 border border-slate-200 rounded-xl focus:ring-2 focus:ring-[#3776c5]/30 focus:border-[#3776c5] transition-all outline-none text-sm text-slate-900"
+                      required
+                      minLength={8}
+                      disabled={!token || !email}
+                    />
+                    <button
+                      type="button"
+                      onClick={() => setShowPassword(!showPassword)}
+                      className="absolute right-4 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 transition-colors"
+                      disabled={!token || !email}
+                    >
+                      {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
+                    </button>
+                  </div>
                   <p className="text-xs text-slate-500 mt-1">Minimum 8 caractères</p>
                 </div>
 
                 <div>
-                  <label className="block text-slate-700 font-semibold mb-2 text-sm">Confirmer le mot de passe</label>
-                  <input
-                    type="password"
-                    placeholder="••••••••"
-                    value={passwordConfirmation}
-                    onChange={(e) => setPasswordConfirmation(e.target.value)}
-                    className="w-full px-4 py-3.5 border border-slate-200 rounded-xl focus:ring-2 focus:ring-[#3776c5]/30 focus:border-[#3776c5] transition-all outline-none text-sm text-slate-900"
-                    required
-                    minLength={8}
-                    disabled={!token || !email}
-                  />
+                  <label className="block text-slate-700 font-semibold mb-2 text-sm">Confirmer le mot de passe *</label>
+                  <div className="relative">
+                    <input
+                      type={showPasswordConfirm ? "text" : "password"}
+                      placeholder="••••••••"
+                      value={passwordConfirmation}
+                      onChange={(e) => setPasswordConfirmation(e.target.value)}
+                      className="w-full px-4 py-3.5 pr-12 border border-slate-200 rounded-xl focus:ring-2 focus:ring-[#3776c5]/30 focus:border-[#3776c5] transition-all outline-none text-sm text-slate-900"
+                      required
+                      minLength={8}
+                      disabled={!token || !email}
+                    />
+                    <button
+                      type="button"
+                      onClick={() => setShowPasswordConfirm(!showPasswordConfirm)}
+                      className="absolute right-4 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 transition-colors"
+                      disabled={!token || !email}
+                    >
+                      {showPasswordConfirm ? <EyeOff size={20} /> : <Eye size={20} />}
+                    </button>
+                  </div>
                 </div>
 
                 <button

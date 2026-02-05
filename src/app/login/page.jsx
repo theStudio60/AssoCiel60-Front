@@ -132,7 +132,7 @@ export default function Login() {
             <div className="mt-6 text-center">
               <p className="text-slate-600 text-sm">
                 Pas encore membre ?{' '}
-                <a href="#" className="text-[#3776c5] font-semibold hover:underline">
+                <a href="/register" className="text-[#3776c5] font-semibold hover:underline">
                   Adhérer maintenant
                 </a>
               </p>

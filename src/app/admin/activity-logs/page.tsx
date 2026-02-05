@@ -49,7 +49,7 @@ export default function ActivityLogsPage() {
   const [pagination, setPagination] = useState<PaginationInfo>({
     current_page: 1,
     last_page: 1,
-    per_page: 15,
+    per_page: 10,
     total: 0,
     from: 0,
     to: 0,
@@ -195,6 +195,18 @@ export default function ActivityLogsPage() {
       cancelButtonColor: '#64748b',
       confirmButtonText: 'Supprimer',
       cancelButtonText: 'Annuler',
+      didOpen: () => {
+        const confirmBtn = document.querySelector('.swal2-confirm') as HTMLElement;
+        const cancelBtn = document.querySelector('.swal2-cancel') as HTMLElement;
+        if (confirmBtn) {
+          confirmBtn.style.color = '#ffffff';
+          confirmBtn.style.backgroundColor = '#ef4444';
+        }
+        if (cancelBtn) {
+          cancelBtn.style.color = '#ffffff';
+          cancelBtn.style.backgroundColor = '#64748b';
+        }
+      }
     });
 
     if (result.isConfirmed) {
@@ -213,6 +225,13 @@ export default function ActivityLogsPage() {
             title: 'Logs nettoyés !',
             text: data.message,
             confirmButtonColor: '#3776c5',
+            didOpen: () => {
+              const confirmBtn = document.querySelector('.swal2-confirm') as HTMLElement;
+              if (confirmBtn) {
+                confirmBtn.style.color = '#ffffff';
+                confirmBtn.style.backgroundColor = '#3776c5';
+              }
+            }
           });
           fetchLogs(1);
           fetchStats();

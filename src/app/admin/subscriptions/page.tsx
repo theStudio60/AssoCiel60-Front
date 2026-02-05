@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Sidebar from '@/components/admin/Sidebar';
 import Header from '@/components/admin/Header';
-import { Search, Download, MoreVertical, Eye, RefreshCw, XCircle, Package, CheckCircle, Clock, AlertCircle, ChevronLeft, ChevronRight } from 'lucide-react';
+import { Search, Download, MoreVertical, RefreshCw, XCircle, Package, CheckCircle, Clock, AlertCircle, ChevronLeft, ChevronRight } from 'lucide-react';
 import Swal from 'sweetalert2';
 
 interface Subscription {
@@ -53,13 +53,14 @@ export default function SubscriptionsPage() {
   const [pagination, setPagination] = useState<PaginationInfo>({
     current_page: 1,
     last_page: 1,
-    per_page: 15,
+    per_page: 10,
     total: 0,
     from: 0,
     to: 0,
   });
   const [filters, setFilters] = useState({ search: '', status: '' });
   const [openDropdown, setOpenDropdown] = useState<number | null>(null);
+  const [hoveredRow, setHoveredRow] = useState<number | null>(null);
 
   useEffect(() => {
     const token = localStorage.getItem('token');
@@ -187,6 +188,18 @@ export default function SubscriptionsPage() {
       cancelButtonColor: '#64748b',
       confirmButtonText: 'Renouveler',
       cancelButtonText: 'Annuler',
+      didOpen: () => {
+        const confirmBtn = document.querySelector('.swal2-confirm') as HTMLElement;
+        const cancelBtn = document.querySelector('.swal2-cancel') as HTMLElement;
+        if (confirmBtn) {
+          confirmBtn.style.color = '#ffffff';
+          confirmBtn.style.backgroundColor = '#3776c5';
+        }
+        if (cancelBtn) {
+          cancelBtn.style.color = '#ffffff';
+          cancelBtn.style.backgroundColor = '#64748b';
+        }
+      }
     });
 
     if (result.isConfirmed) {
@@ -215,6 +228,7 @@ export default function SubscriptionsPage() {
       }
     }
     setOpenDropdown(null);
+    setHoveredRow(null);
   };
 
   const handleCancel = async (id: number, orgName: string) => {
@@ -227,6 +241,18 @@ export default function SubscriptionsPage() {
       cancelButtonColor: '#64748b',
       confirmButtonText: 'Annuler l\'abonnement',
       cancelButtonText: 'Retour',
+      didOpen: () => {
+        const confirmBtn = document.querySelector('.swal2-confirm') as HTMLElement;
+        const cancelBtn = document.querySelector('.swal2-cancel') as HTMLElement;
+        if (confirmBtn) {
+          confirmBtn.style.color = '#ffffff';
+          confirmBtn.style.backgroundColor = '#ef4444';
+        }
+        if (cancelBtn) {
+          cancelBtn.style.color = '#ffffff';
+          cancelBtn.style.backgroundColor = '#64748b';
+        }
+      }
     });
 
     if (result.isConfirmed) {
@@ -255,6 +281,7 @@ export default function SubscriptionsPage() {
       }
     }
     setOpenDropdown(null);
+    setHoveredRow(null);
   };
 
   const getStatusBadge = (status: string) => {
@@ -388,8 +415,16 @@ export default function SubscriptionsPage() {
                   <tr><td colSpan={8} className="px-3 py-6 text-center text-xs text-slate-600">Aucun abonnement trouvé</td></tr>
                 ) : (
                   subscriptions.map((sub) => {
+                    const isHovered = hoveredRow === sub.id;
+                    const isOpen = openDropdown === sub.id;
+                    
                     return (
-                      <tr key={sub.id} className="hover:bg-slate-50 transition-colors">
+                      <tr 
+                        key={sub.id} 
+                        className="hover:bg-slate-50 transition-colors"
+                        onMouseEnter={() => setHoveredRow(sub.id)}
+                        onMouseLeave={() => setHoveredRow(null)}
+                      >
                         <td className="px-3 py-2.5">
                           <input type="checkbox" className="w-3.5 h-3.5 rounded" />
                         </td>
@@ -433,32 +468,32 @@ export default function SubscriptionsPage() {
                         <td className="px-3 py-2.5">
                           <div className="relative">
                             <button
-                              onClick={() => setOpenDropdown(openDropdown === sub.id ? null : sub.id)}
+                              onClick={() => setOpenDropdown(isOpen ? null : sub.id)}
                               className="p-1.5 hover:bg-slate-100 rounded-lg transition-colors"
                             >
                               <MoreVertical size={14} className="text-slate-600" />
                             </button>
-                            {openDropdown === sub.id && (
-                              <div className="absolute right-0 mt-1 w-40 bg-white rounded-lg shadow-xl border border-slate-200 z-50 overflow-hidden">
-                                <button
-                                  onClick={() => {
-                                    router.push(`/admin/subscriptions/${sub.id}`);
-                                    setOpenDropdown(null);
-                                  }}
-                                  className="w-full flex items-center gap-2 px-3 py-2 hover:bg-slate-50 text-slate-700 text-xs"
-                                >
-                                  Voir détails
-                                </button>
+                            
+                            {(isHovered || isOpen) && (
+                              <div 
+                                className="absolute right-0 mt-1 w-40 bg-white rounded-lg shadow-xl border border-slate-200 z-50 overflow-hidden"
+                                onMouseEnter={() => setHoveredRow(sub.id)}
+                                onMouseLeave={() => {
+                                  if (!isOpen) setHoveredRow(null);
+                                }}
+                              >
                                 <button
                                   onClick={() => handleRenew(sub.id, sub.organization?.name)}
-                                  className="w-full flex items-center gap-2 px-3 py-2 hover:bg-green-50 text-green-600 text-xs border-t border-slate-100"
+                                  className="w-full flex items-center gap-2 px-3 py-2 hover:bg-green-50 text-green-600 text-xs border-b border-slate-100 transition-colors"
                                 >
+                                  <RefreshCw size={14} />
                                   Renouveler
                                 </button>
                                 <button
                                   onClick={() => handleCancel(sub.id, sub.organization?.name)}
-                                  className="w-full flex items-center gap-2 px-3 py-2 hover:bg-red-50 text-red-600 text-xs border-t border-slate-100"
+                                  className="w-full flex items-center gap-2 px-3 py-2 hover:bg-red-50 text-red-600 text-xs transition-colors"
                                 >
+                                  <XCircle size={14} />
                                   Annuler
                                 </button>
                               </div>

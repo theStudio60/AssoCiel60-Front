@@ -16,6 +16,7 @@ import {
   Menu,
   Mail,
   Activity,
+  Shield,
 } from 'lucide-react';
 
 export default function Sidebar() {
@@ -37,6 +38,7 @@ export default function Sidebar() {
   ];
 
   const others = [
+    { icon: Shield, label: 'Administrateurs', path: '/admin/admins', section: 'main' },
     { icon: Activity, label: 'Logs d\'Activité', path: '/admin/activity-logs', section: 'main' },
     { icon: FileText, label: 'Rapports', path: '/admin/reports', section: 'main' },
     { icon: Settings, label: t('settings'), path: '/admin/settings' },

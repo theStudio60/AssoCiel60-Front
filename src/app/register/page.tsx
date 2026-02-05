@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import Image from 'next/image';
-import { User, Building2 } from 'lucide-react';
+import { User, Building2, Eye, EyeOff } from 'lucide-react';
 
 interface Plan {
   id: number;
@@ -18,9 +18,11 @@ export default function Register() {
   const router = useRouter();
   const [plans, setPlans] = useState<Plan[]>([]);
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState('');
+  const [errors, setErrors] = useState<any>({});
   const [membershipType, setMembershipType] = useState('');
   const [selectedPlan, setSelectedPlan] = useState<Plan | null>(null);
+  const [showPassword, setShowPassword] = useState(false);
+  const [showPasswordConfirm, setShowPasswordConfirm] = useState(false);
   const [formData, setFormData] = useState({
     type: '',
     plan_id: 0,
@@ -62,7 +64,6 @@ export default function Register() {
     setFormData({ ...formData, type });
     
     if (type === 'individual') {
-      // Sélectionner automatiquement le plan particulier (ID 1)
       const individualPlan = plans.find(p => p.id === 1);
       if (individualPlan) {
         setSelectedPlan(individualPlan);
@@ -85,18 +86,18 @@ export default function Register() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setError('');
+    setErrors({});
     setLoading(true);
 
-    // Validation
+    // Validation côté client
     if (formData.password !== formData.password_confirmation) {
-      setError('Les mots de passe ne correspondent pas');
+      setErrors({ password_confirmation: ['Les mots de passe ne correspondent pas'] });
       setLoading(false);
       return;
     }
 
     if (!formData.accept_terms) {
-      setError('Vous devez accepter les conditions générales');
+      setErrors({ accept_terms: ['Vous devez accepter les conditions générales'] });
       setLoading(false);
       return;
     }
@@ -111,7 +112,12 @@ export default function Register() {
       const data = await res.json();
 
       if (!res.ok) {
-        setError(data.message || 'Erreur lors de l\'inscription');
+        // Gérer les erreurs de validation Laravel
+        if (data.errors) {
+          setErrors(data.errors);
+        } else if (data.message) {
+          setErrors({ general: [data.message] });
+        }
         setLoading(false);
         return;
       }
@@ -119,22 +125,15 @@ export default function Register() {
       // Succès - Sauvegarder token et rediriger
       localStorage.setItem('token', data.token);
       localStorage.setItem('user', JSON.stringify(data.user));
-
-      // Rediriger vers page de paiement ou dashboard membre
-      if (data.payment_required) {
-        // TODO: Rediriger vers page de paiement
-        router.push('/member/payment');
-      } else {
-        router.push('/member/dashboard');
-      }
+      router.push(`/payment?plan_id=${formData.plan_id}`);
+      
     } catch (err) {
-      setError('Erreur de connexion au serveur');
+      setErrors({ general: ['Erreur de connexion au serveur'] });
       setLoading(false);
     }
   };
 
-  // Filtrer les plans selon le type
-  const organizationPlans = plans.filter(p => p.id !== 1); // Tous sauf particulier
+  const organizationPlans = plans.filter(p => p.id !== 1);
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-white via-blue-50 to-indigo-100 relative">
@@ -219,6 +218,7 @@ export default function Register() {
                 setSelectedPlan(null);
                 setMembershipType('');
                 setFormData({ ...formData, plan_id: 0 });
+                setErrors({});
               }}
               className="mb-6 text-[#3776c5] hover:underline flex items-center gap-2"
             >
@@ -236,9 +236,10 @@ export default function Register() {
                 </p>
               </div>
 
-              {error && (
+              {/* Erreur générale */}
+              {errors.general && (
                 <div className="mb-4 p-4 bg-red-50 border border-red-200 rounded-xl text-red-600 text-sm">
-                  {error}
+                  {errors.general[0]}
                 </div>
               )}
 
@@ -280,9 +281,12 @@ export default function Register() {
                       type="text"
                       value={formData.organization_name}
                       onChange={(e) => setFormData({ ...formData, organization_name: e.target.value })}
-                      className="w-full px-4 py-2.5 border border-slate-300 rounded-lg focus:ring-2 focus:ring-[#3776c5]/30 focus:border-[#3776c5] outline-none text-sm"
+                      className={`w-full px-4 py-2.5 border ${errors.organization_name ? 'border-red-500' : 'border-slate-300'} rounded-lg focus:ring-2 focus:ring-[#3776c5]/30 focus:border-[#3776c5] outline-none text-sm`}
                       required
                     />
+                    {errors.organization_name && (
+                      <p className="text-red-500 text-xs mt-1">{errors.organization_name[0]}</p>
+                    )}
                   </div>
                 )}
 
@@ -296,9 +300,12 @@ export default function Register() {
                       type="text"
                       value={formData.first_name}
                       onChange={(e) => setFormData({ ...formData, first_name: e.target.value })}
-                      className="w-full px-4 py-2.5 border border-slate-300 rounded-lg focus:ring-2 focus:ring-[#3776c5]/30 focus:border-[#3776c5] outline-none text-sm"
+                      className={`w-full px-4 py-2.5 border ${errors.first_name ? 'border-red-500' : 'border-slate-300'} rounded-lg focus:ring-2 focus:ring-[#3776c5]/30 focus:border-[#3776c5] outline-none text-sm`}
                       required
                     />
+                    {errors.first_name && (
+                      <p className="text-red-500 text-xs mt-1">{errors.first_name[0]}</p>
+                    )}
                   </div>
                   <div>
                     <label className="block text-sm font-semibold mb-2">
@@ -308,9 +315,12 @@ export default function Register() {
                       type="text"
                       value={formData.last_name}
                       onChange={(e) => setFormData({ ...formData, last_name: e.target.value })}
-                      className="w-full px-4 py-2.5 border border-slate-300 rounded-lg focus:ring-2 focus:ring-[#3776c5]/30 focus:border-[#3776c5] outline-none text-sm"
+                      className={`w-full px-4 py-2.5 border ${errors.last_name ? 'border-red-500' : 'border-slate-300'} rounded-lg focus:ring-2 focus:ring-[#3776c5]/30 focus:border-[#3776c5] outline-none text-sm`}
                       required
                     />
+                    {errors.last_name && (
+                      <p className="text-red-500 text-xs mt-1">{errors.last_name[0]}</p>
+                    )}
                   </div>
                 </div>
 
@@ -321,9 +331,12 @@ export default function Register() {
                     type="text"
                     value={formData.address}
                     onChange={(e) => setFormData({ ...formData, address: e.target.value })}
-                    className="w-full px-4 py-2.5 border border-slate-300 rounded-lg focus:ring-2 focus:ring-[#3776c5]/30 focus:border-[#3776c5] outline-none text-sm"
+                    className={`w-full px-4 py-2.5 border ${errors.address ? 'border-red-500' : 'border-slate-300'} rounded-lg focus:ring-2 focus:ring-[#3776c5]/30 focus:border-[#3776c5] outline-none text-sm`}
                     required
                   />
+                  {errors.address && (
+                    <p className="text-red-500 text-xs mt-1">{errors.address[0]}</p>
+                  )}
                 </div>
 
                 <div>
@@ -344,9 +357,12 @@ export default function Register() {
                       type="text"
                       value={formData.postal_code}
                       onChange={(e) => setFormData({ ...formData, postal_code: e.target.value })}
-                      className="w-full px-4 py-2.5 border border-slate-300 rounded-lg focus:ring-2 focus:ring-[#3776c5]/30 focus:border-[#3776c5] outline-none text-sm"
+                      className={`w-full px-4 py-2.5 border ${errors.postal_code ? 'border-red-500' : 'border-slate-300'} rounded-lg focus:ring-2 focus:ring-[#3776c5]/30 focus:border-[#3776c5] outline-none text-sm`}
                       required
                     />
+                    {errors.postal_code && (
+                      <p className="text-red-500 text-xs mt-1">{errors.postal_code[0]}</p>
+                    )}
                   </div>
                   <div>
                     <label className="block text-sm font-semibold mb-2">Ville *</label>
@@ -354,9 +370,12 @@ export default function Register() {
                       type="text"
                       value={formData.city}
                       onChange={(e) => setFormData({ ...formData, city: e.target.value })}
-                      className="w-full px-4 py-2.5 border border-slate-300 rounded-lg focus:ring-2 focus:ring-[#3776c5]/30 focus:border-[#3776c5] outline-none text-sm"
+                      className={`w-full px-4 py-2.5 border ${errors.city ? 'border-red-500' : 'border-slate-300'} rounded-lg focus:ring-2 focus:ring-[#3776c5]/30 focus:border-[#3776c5] outline-none text-sm`}
                       required
                     />
+                    {errors.city && (
+                      <p className="text-red-500 text-xs mt-1">{errors.city[0]}</p>
+                    )}
                   </div>
                 </div>
 
@@ -367,9 +386,12 @@ export default function Register() {
                     type="tel"
                     value={formData.phone}
                     onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
-                    className="w-full px-4 py-2.5 border border-slate-300 rounded-lg focus:ring-2 focus:ring-[#3776c5]/30 focus:border-[#3776c5] outline-none text-sm"
+                    className={`w-full px-4 py-2.5 border ${errors.phone ? 'border-red-500' : 'border-slate-300'} rounded-lg focus:ring-2 focus:ring-[#3776c5]/30 focus:border-[#3776c5] outline-none text-sm`}
                     required
                   />
+                  {errors.phone && (
+                    <p className="text-red-500 text-xs mt-1">{errors.phone[0]}</p>
+                  )}
                 </div>
 
                 <div>
@@ -378,34 +400,61 @@ export default function Register() {
                     type="email"
                     value={formData.email}
                     onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                    className="w-full px-4 py-2.5 border border-slate-300 rounded-lg focus:ring-2 focus:ring-[#3776c5]/30 focus:border-[#3776c5] outline-none text-sm"
+                    className={`w-full px-4 py-2.5 border ${errors.email ? 'border-red-500' : 'border-slate-300'} rounded-lg focus:ring-2 focus:ring-[#3776c5]/30 focus:border-[#3776c5] outline-none text-sm`}
                     required
                   />
+                  {errors.email && (
+                    <p className="text-red-500 text-xs mt-1">{errors.email[0]}</p>
+                  )}
                 </div>
 
-                {/* Password */}
+                {/* Password with Eye Icon */}
                 <div className="grid grid-cols-2 gap-4">
                   <div>
                     <label className="block text-sm font-semibold mb-2">Mot de passe *</label>
-                    <input
-                      type="password"
-                      value={formData.password}
-                      onChange={(e) => setFormData({ ...formData, password: e.target.value })}
-                      className="w-full px-4 py-2.5 border border-slate-300 rounded-lg focus:ring-2 focus:ring-[#3776c5]/30 focus:border-[#3776c5] outline-none text-sm"
-                      required
-                      minLength={8}
-                    />
+                    <div className="relative">
+                      <input
+                        type={showPassword ? "text" : "password"}
+                        value={formData.password}
+                        onChange={(e) => setFormData({ ...formData, password: e.target.value })}
+                        className={`w-full px-4 py-2.5 pr-10 border ${errors.password ? 'border-red-500' : 'border-slate-300'} rounded-lg focus:ring-2 focus:ring-[#3776c5]/30 focus:border-[#3776c5] outline-none text-sm`}
+                        required
+                        minLength={8}
+                      />
+                      <button
+                        type="button"
+                        onClick={() => setShowPassword(!showPassword)}
+                        className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600"
+                      >
+                        {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+                      </button>
+                    </div>
+                    {errors.password && (
+                      <p className="text-red-500 text-xs mt-1">{errors.password[0]}</p>
+                    )}
                   </div>
                   <div>
                     <label className="block text-sm font-semibold mb-2">Confirmation *</label>
-                    <input
-                      type="password"
-                      value={formData.password_confirmation}
-                      onChange={(e) => setFormData({ ...formData, password_confirmation: e.target.value })}
-                      className="w-full px-4 py-2.5 border border-slate-300 rounded-lg focus:ring-2 focus:ring-[#3776c5]/30 focus:border-[#3776c5] outline-none text-sm"
-                      required
-                      minLength={8}
-                    />
+                    <div className="relative">
+                      <input
+                        type={showPasswordConfirm ? "text" : "password"}
+                        value={formData.password_confirmation}
+                        onChange={(e) => setFormData({ ...formData, password_confirmation: e.target.value })}
+                        className={`w-full px-4 py-2.5 pr-10 border ${errors.password_confirmation ? 'border-red-500' : 'border-slate-300'} rounded-lg focus:ring-2 focus:ring-[#3776c5]/30 focus:border-[#3776c5] outline-none text-sm`}
+                        required
+                        minLength={8}
+                      />
+                      <button
+                        type="button"
+                        onClick={() => setShowPasswordConfirm(!showPasswordConfirm)}
+                        className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600"
+                      >
+                        {showPasswordConfirm ? <EyeOff size={18} /> : <Eye size={18} />}
+                      </button>
+                    </div>
+                    {errors.password_confirmation && (
+                      <p className="text-red-500 text-xs mt-1">{errors.password_confirmation[0]}</p>
+                    )}
                   </div>
                 </div>
 
@@ -452,6 +501,9 @@ export default function Register() {
                       En adhérant à Alprail, j'accepte les <a href="#" className="text-[#3776c5] hover:underline">statuts</a> ainsi que les <a href="#" className="text-[#3776c5] hover:underline">conditions générales</a> de l'inscription via le site web d'alprail.
                     </span>
                   </label>
+                  {errors.accept_terms && (
+                    <p className="text-red-500 text-xs mt-1">{errors.accept_terms[0]}</p>
+                  )}
                 </div>
 
                 {/* Submit */}
