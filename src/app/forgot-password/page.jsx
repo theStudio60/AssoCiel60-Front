@@ -46,7 +46,7 @@ export default function ForgotPassword() {
         <div className="max-w-7xl mx-auto px-6 py-5 flex items-center justify-between">
           <Image src="/logo.png" alt="Alprail" width={180} height={50} className="object-contain" />
           <a 
-            href="#" 
+            href="/register" 
             className="border-2 border-[#3776c5] text-[#3776c5] px-8 py-2.5 rounded-full font-semibold hover:bg-[#3776c5] hover:text-white transition-all shadow-md hover:shadow-lg transform hover:-translate-y-0.5"
             >
             Adhérer
