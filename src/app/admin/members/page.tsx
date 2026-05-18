@@ -521,7 +521,7 @@ export default function MembersPage() {
           </div>
 
           {/* Table */}
-          <div className="bg-white rounded-lg border border-slate-200 overflow-hidden">
+          <div className="bg-white rounded-lg border border-slate-200">
             <table className="w-full">
               <thead className="bg-white border-b border-slate-200">
                 <tr>

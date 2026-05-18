@@ -72,7 +72,7 @@ export default function Login() {
         <div className="w-full max-w-lg">
           <div className="bg-white/90 backdrop-blur-xl px-16 py-12 rounded-3xl shadow-2xl border border-blue-100">
             <div className="text-center mb-8">
-              <h1 className="text-4xl font-bold text-[#3776c5] mb-2">Connexion - </h1>
+              <h1 className="text-4xl font-bold text-[#3776c5] mb-2">Connexion *</h1>
               <p className="text-slate-600 text-sm">Accédez à votre espace membre</p>
             </div>
 

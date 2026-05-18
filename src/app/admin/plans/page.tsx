@@ -672,7 +672,11 @@ export default function PlansPage() {
                     type="number"
                     step="0.01"
                     value={formData.price_chf}
-                    onChange={(e) => setFormData({ ...formData, price_chf: e.target.value })}
+                    onChange={(e) => {
+                      const chf = e.target.value;
+                      const eur = chf ? (parseFloat(chf) * 0.93).toFixed(2) : '';
+                      setFormData({ ...formData, price_chf: chf, price_eur: eur });
+                    }}
                     className="w-full px-4 py-2.5 border border-slate-300 rounded-lg focus:ring-2 focus:ring-[#3776c5]/20 focus:border-[#3776c5] outline-none text-sm"
                     required
                   />
@@ -686,7 +690,11 @@ export default function PlansPage() {
                     type="number"
                     step="0.01"
                     value={formData.price_eur}
-                    onChange={(e) => setFormData({ ...formData, price_eur: e.target.value })}
+                    onChange={(e) => {
+                      const eur = e.target.value;
+                      const chf = eur ? (parseFloat(eur) * 1.08).toFixed(2) : '';
+                      setFormData({ ...formData, price_eur: eur, price_chf: chf });
+                    }}
                     className="w-full px-4 py-2.5 border border-slate-300 rounded-lg focus:ring-2 focus:ring-[#3776c5]/20 focus:border-[#3776c5] outline-none text-sm"
                     required
                   />
