@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Sidebar from '@/components/admin/Sidebar';
 import Header from '@/components/admin/Header';
-import { Mail, Send, Settings as SettingsIcon, Save, AlertCircle, CheckCircle, Clock } from 'lucide-react';
+import { Mail, Send, Settings as SettingsIcon, Save, AlertCircle, CheckCircle, Clock, Eye, EyeOff } from 'lucide-react';
 import Swal from 'sweetalert2';
 
 interface EmailSettings {
@@ -19,6 +19,8 @@ interface EmailSettings {
   payment_subject: string;
   smtp_host: string;
   smtp_port: string;
+  smtp_username: string;
+  smtp_password: string;
   smtp_from_email: string;
   smtp_from_name: string;
 }
@@ -28,6 +30,7 @@ export default function EmailsPage() {
   const [user, setUser] = useState<any>(null);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
   const [testEmail, setTestEmail] = useState('');
   const [testType, setTestType] = useState('welcome');
   const [settings, setSettings] = useState<EmailSettings>({
@@ -42,6 +45,8 @@ export default function EmailsPage() {
     payment_subject: '',
     smtp_host: '',
     smtp_port: '',
+    smtp_username: '',
+    smtp_password: '',
     smtp_from_email: '',
     smtp_from_name: '',
   });
@@ -382,6 +387,35 @@ export default function EmailsPage() {
                         className="w-full px-4 py-2.5 border border-slate-300 rounded-lg focus:ring-2 focus:ring-[#3776c5]/20 focus:border-[#3776c5] outline-none text-sm"
                         placeholder="587"
                       />
+                    </div>
+                    <div>
+                      <label className="block text-xs font-semibold text-slate-700 mb-2">Username SMTP</label>
+                      <input
+                        type="text"
+                        value={settings.smtp_username}
+                        onChange={(e) => setSettings({ ...settings, smtp_username: e.target.value })}
+                        className="w-full px-4 py-2.5 border border-slate-300 rounded-lg focus:ring-2 focus:ring-[#3776c5]/20 focus:border-[#3776c5] outline-none text-sm"
+                        placeholder="contact@alprail.net"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-xs font-semibold text-slate-700 mb-2">Mot de passe SMTP</label>
+                      <div className="relative">
+                        <input
+                          type={showPassword ? "text" : "password"}
+                          value={settings.smtp_password}
+                          onChange={(e) => setSettings({ ...settings, smtp_password: e.target.value })}
+                          className="w-full px-4 py-2.5 pr-10 border border-slate-300 rounded-lg focus:ring-2 focus:ring-[#3776c5]/20 focus:border-[#3776c5] outline-none text-sm"
+                          placeholder="••••••••"
+                        />
+                        <button
+                          type="button"
+                          onClick={() => setShowPassword(!showPassword)}
+                          className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600"
+                        >
+                          {showPassword ? <EyeOff size={16} /> : <Eye size={16} />}
+                        </button>
+                      </div>
                     </div>
                     <div>
                       <label className="block text-xs font-semibold text-slate-700 mb-2">Email d'envoi</label>
