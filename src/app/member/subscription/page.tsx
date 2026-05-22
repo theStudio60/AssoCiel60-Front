@@ -15,12 +15,14 @@ interface Subscription {
     price_chf: string;
     price_eur: string;
   };
+  organization?: {
+    country: string;
+  };
   start_date: string;
   end_date: string;
   status: string;
   auto_renew: boolean;
 }
-
 export default function MemberSubscriptionPage() {
   const router = useRouter();
   const [user, setUser] = useState<any>(null);
