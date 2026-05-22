@@ -247,16 +247,18 @@ export default function MemberSubscriptionPage() {
               </div>
 
               {/* Prix */}
+              {/* Prix */}
               <div className="flex items-center gap-3 p-4 bg-slate-50 rounded-lg">
                 <div className="w-12 h-12 rounded-lg bg-gradient-to-br from-violet-500 to-purple-500 flex items-center justify-center flex-shrink-0">
                   <DollarSign size={24} className="text-white" />
                 </div>
                 <div>
-                  <p className="text-xs text-slate-600 mb-1">Prix</p>
+                  <p className="text-xs text-slate-600 mb-1">Cotisation</p>
                   <p className="text-lg font-bold text-slate-900">
-                    {subscription.subscription_plan.price_chf} CHF
+                    {subscription.organization?.country === 'FR'
+                      ? `${subscription.subscription_plan.price_eur} EUR`
+                      : `${subscription.subscription_plan.price_chf} CHF`}
                   </p>
-                  <p className="text-xs text-slate-500">{subscription.subscription_plan.price_eur} EUR</p>
                 </div>
               </div>
             </div>
@@ -321,13 +323,6 @@ export default function MemberSubscriptionPage() {
                 <div>
                   <p className="text-sm font-semibold text-slate-900">Accès complet à la plateforme</p>
                   <p className="text-xs text-slate-600">Toutes les fonctionnalités incluses</p>
-                </div>
-              </div>
-              <div className="flex items-start gap-3">
-                <CheckCircle size={18} className="text-green-600 mt-0.5 flex-shrink-0" />
-                <div>
-                  <p className="text-sm font-semibold text-slate-900">Support prioritaire</p>
-                  <p className="text-xs text-slate-600">Assistance par email sous 24h</p>
                 </div>
               </div>
               <div className="flex items-start gap-3">
