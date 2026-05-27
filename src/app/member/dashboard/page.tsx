@@ -152,7 +152,7 @@ export default function MemberDashboard() {
 
           {/* Action Cards - Compact */}
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
-            {/* Abonnement */}
+            {/* adhésion */}
             <div className="bg-white rounded-xl p-5 border border-slate-200">
               <div className="flex items-center justify-between mb-4">
                 <h2 className="text-base font-bold text-slate-900">Mon Abonnement</h2>
@@ -169,7 +169,7 @@ export default function MemberDashboard() {
                   <div className="flex items-center gap-2">
                     <CheckCircle size={20} className="text-green-600" />
                     <div>
-                      <p className="text-sm font-semibold text-slate-900">Abonnement actif</p>
+                      <p className="text-sm font-semibold text-slate-900">Adhésion active</p>
                       <p className="text-xs text-slate-600">
                         {subscription.subscription.subscription_plan?.name} - {subscription.subscription.subscription_plan?.price_chf} CHF
                       </p>

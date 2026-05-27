@@ -74,8 +74,8 @@ export default function MemberSubscriptionPage() {
     const result = await Swal.fire({
       title: subscription.auto_renew ? 'Désactiver le renouvellement automatique ?' : 'Activer le renouvellement automatique ?',
       text: subscription.auto_renew 
-        ? 'Votre abonnement ne sera plus renouvelé automatiquement' 
-        : 'Votre abonnement sera renouvelé automatiquement chaque année',
+        ? 'Votre adhésion ne sera plus renouvelé automatiquement' 
+        : 'Votre adhésion sera renouvelé automatiquement chaque année',
       icon: 'question',
       showCancelButton: true,
       confirmButtonColor: '#3776c5',
@@ -116,7 +116,7 @@ export default function MemberSubscriptionPage() {
 
   const handleRenew = async () => {
     const result = await Swal.fire({
-      title: 'Renouveler l\'abonnement ?',
+      title: 'Renouveler l\'adhésion ?',
       text: 'Une demande de renouvellement sera envoyée à l\'administrateur',
       icon: 'question',
       showCancelButton: true,
@@ -183,8 +183,8 @@ export default function MemberSubscriptionPage() {
           <main className="p-4">
             <div className="text-center py-12">
               <Package size={48} className="text-slate-300 mx-auto mb-4" />
-              <h2 className="text-lg font-bold text-slate-900 mb-2">Aucun abonnement</h2>
-              <p className="text-sm text-slate-600">Vous n'avez pas d'abonnement actif</p>
+              <h2 className="text-lg font-bold text-slate-900 mb-2">Aucun adhésion</h2>
+              <p className="text-sm text-slate-600">Vous n'avez pas d'adhésion actif</p>
             </div>
           </main>
         </div>
@@ -203,7 +203,7 @@ export default function MemberSubscriptionPage() {
           {/* Page Title */}
           <div className="mb-4">
             <h1 className="text-xl font-bold text-slate-900">Mon Abonnement</h1>
-            <p className="text-xs text-slate-600 mt-0.5">Détails de votre abonnement actuel</p>
+            <p className="text-xs text-slate-600 mt-0.5">Détails de votre adhésion actuel</p>
           </div>
 
           {/* Main Card */}
@@ -273,7 +273,7 @@ export default function MemberSubscriptionPage() {
                   <p className="text-sm font-semibold text-slate-900">Renouvellement automatique</p>
                   <p className="text-xs text-slate-600">
                     {subscription.auto_renew 
-                      ? 'Votre abonnement sera renouvelé automatiquement' 
+                      ? 'Votre adhésion sera renouvelé automatiquement' 
                       : 'Renouvellement manuel requis'}
                   </p>
                 </div>
