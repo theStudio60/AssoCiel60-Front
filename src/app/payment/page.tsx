@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import Image from 'next/image';
-import { CreditCard, Loader2, CheckCircle, Shield } from 'lucide-react';
+import { CreditCard, Loader2, CheckCircle} from 'lucide-react';
 import Swal from 'sweetalert2';
 
 export default function PaymentPage() {
@@ -132,18 +132,6 @@ export default function PaymentPage() {
                     <p className="font-semibold mb-1">Paiement 100% sécurisé</p>
                     <p className="text-xs text-slate-600">
                       Vos données de paiement sont cryptées et sécurisées selon les normes PCI-DSS. Nous ne stockons jamais vos informations bancaires.
-                    </p>
-                  </div>
-                </div>
-              </div>
-
-              <div className="p-4 bg-purple-50 border border-purple-200 rounded-xl">
-                <div className="flex items-start gap-3">
-                  <Shield size={20} className="text-purple-600 flex-shrink-0 mt-0.5" />
-                  <div className="text-sm text-slate-700">
-                    <p className="font-semibold mb-1">Stripe - Leader mondial du paiement en ligne</p>
-                    <p className="text-xs text-slate-600">
-                      Stripe est utilisé par des millions d'entreprises dans le monde entier. Frais les plus bas du marché.
                     </p>
                   </div>
                 </div>
