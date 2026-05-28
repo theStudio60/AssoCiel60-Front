@@ -74,8 +74,8 @@ export default function MemberSubscriptionPage() {
     const result = await Swal.fire({
       title: subscription.auto_renew ? 'Désactiver le renouvellement automatique ?' : 'Activer le renouvellement automatique ?',
       text: subscription.auto_renew 
-        ? 'Votre adhésion ne sera plus renouvelé automatiquement' 
-        : 'Votre adhésion sera renouvelé automatiquement chaque année',
+        ? 'Votre adhésion ne sera plus renouvelée automatiquement' 
+        : 'Votre adhésion sera renouvelée automatiquement chaque année',
       icon: 'question',
       showCancelButton: true,
       confirmButtonColor: '#3776c5',
@@ -156,9 +156,9 @@ export default function MemberSubscriptionPage() {
 
   const getStatusBadge = (status: string) => {
     const config: any = {
-      active: { bg: 'bg-green-50', text: 'text-green-700', border: 'border-green-200', label: 'Actif', icon: CheckCircle },
-      expired: { bg: 'bg-red-50', text: 'text-red-700', border: 'border-red-200', label: 'Expiré', icon: AlertCircle },
-      canceled: { bg: 'bg-slate-50', text: 'text-slate-700', border: 'border-slate-200', label: 'Annulé', icon: AlertCircle },
+      active: { bg: 'bg-green-50', text: 'text-green-700', border: 'border-green-200', label: 'Active', icon: CheckCircle },
+      expired: { bg: 'bg-red-50', text: 'text-red-700', border: 'border-red-200', label: 'Expirée', icon: AlertCircle },
+      canceled: { bg: 'bg-slate-50', text: 'text-slate-700', border: 'border-slate-200', label: 'Annulée', icon: AlertCircle },
     };
     
     const c = config[status] || config.active;
@@ -183,8 +183,8 @@ export default function MemberSubscriptionPage() {
           <main className="p-4">
             <div className="text-center py-12">
               <Package size={48} className="text-slate-300 mx-auto mb-4" />
-              <h2 className="text-lg font-bold text-slate-900 mb-2">Aucun adhésion</h2>
-              <p className="text-sm text-slate-600">Vous n'avez pas d'adhésion actif</p>
+                <h2 className="text-lg font-bold text-slate-900 mb-2">Aucune adhésion</h2>
+                <p className="text-sm text-slate-600">Vous n'avez pas d'adhésion active</p>
             </div>
           </main>
         </div>
@@ -202,8 +202,8 @@ export default function MemberSubscriptionPage() {
         <main className="p-4">
           {/* Page Title */}
           <div className="mb-4">
-            <h1 className="text-xl font-bold text-slate-900">Mon Abonnement</h1>
-            <p className="text-xs text-slate-600 mt-0.5">Détails de votre adhésion actuel</p>
+            <h1 className="text-xl font-bold text-slate-900">Mon Adhésion</h1>
+            <p className="text-xs text-slate-600 mt-0.5">Détails de votre adhésion actuelle</p>
           </div>
 
           {/* Main Card */}
@@ -273,7 +273,7 @@ export default function MemberSubscriptionPage() {
                   <p className="text-sm font-semibold text-slate-900">Renouvellement automatique</p>
                   <p className="text-xs text-slate-600">
                     {subscription.auto_renew 
-                      ? 'Votre adhésion sera renouvelé automatiquement' 
+                      ? 'Votre adhésion sera renouvelée automatiquement' 
                       : 'Renouvellement manuel requis'}
                   </p>
                 </div>

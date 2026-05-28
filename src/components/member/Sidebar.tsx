@@ -25,7 +25,7 @@ export default function MemberSidebar() {
 
   const menuItems = [
     { icon: User, label: 'Mon Profil', path: '/member/profile' },
-    { icon: CreditCard, label: 'Mon Abonnement', path: '/member/subscription' },
+    { icon: CreditCard, label: 'Mon Adhésion', path: '/member/subscription' },
     { icon: FileText, label: 'Mes Factures', path: '/member/invoices' },
   ];
 
